@@ -1,0 +1,16 @@
+shared:
+  image: node:18
+  environment:
+    SD_TEMPLATE_PATH: ./template.yaml
+jobs:
+  validate_template:
+    requires: [~pr, ~commit]
+    steps:
+      - install_prerequisites: npm install -g screwdriver-template-main
+      - validate_template: pipeline-template-validate
+
+  publish_template:
+    requires: [validate_template]
+    steps:
+      - install_prerequisites: npm install -g screwdriver-template-main
+      - publish: pipeline-template-publish
